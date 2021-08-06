@@ -94,7 +94,7 @@ def _edit_color(ev):
         itm['edit_color'].Text = '喝口茶'
         edit_marker('color', before, after)
         itm['edit_color'].Enabled = True
-        itm['edit_color'].Text = '修改'
+        itm['edit_color'].Text = '替换'
     
 
 def _edit_notes(ev):
