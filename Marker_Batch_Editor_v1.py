@@ -39,6 +39,8 @@ def read_all_marker():
     mks = this_timeline().GetMarkers()
     return mks
 
+start_up = read_all_marker()
+
 def add_markers(frameId, color, name, note, duration, customData=''):
     o = this_timeline().AddMarker(frameId, color, name, note, duration, customData)
     return o
@@ -153,6 +155,23 @@ def _del_by_color(ev):
     targ = itm['color_a'].CurrentText
     del_markers('color', '', targ)
 
+def _recover(ev):
+    current = read_all_marker()
+    for frameID in current:
+        del_markers('frame', frameID, '')
+    
+
+    for mk_frameId in start_up:
+        mk = start_up[mk_frameId]
+        color = str(mk['color'])
+        duration = int(mk['duration'])
+        note = str(mk['note'])
+        name = str(mk['name'])
+        customData = mk['customData']
+        o = add_markers(mk_frameId, color, name, note, duration, customData)
+        print(o)
+    
+
 def main_ui(ui):
     window = ui.VGroup({"Spacing": 10,},[
         ui.HGroup({"Spacing": 10, "Weight": 0,},[ 
@@ -177,6 +196,7 @@ def main_ui(ui):
             ui.LineEdit({ "ID": "name_b","Weight": 4}),
             ui.Button({ "ID": "edit_name", "Text": "修改","Weight": 0}),
         ]),
+        ui.Button({ "ID": "recover","Text": "手滑了 恢复", "Flat": True}),
         ])
     return window
 
@@ -194,7 +214,7 @@ if __name__ == '__main__':
                         "ID": "MyWin", 
                         "Geometry": [ 
                                     600, 600, 
-                                    600, 160
+                                    600, 150
                          ], 
                         },
     window_01)
@@ -208,7 +228,7 @@ if __name__ == '__main__':
     dlg.On.edit_name.Clicked = _edit_name
     dlg.On.edit_notes.Clicked = _edit_notes
     dlg.On.del_by_color.Clicked = _del_by_color
-    
+    dlg.On.recover.Clicked = _recover
 
     dlg.On.MyWin.Close = _exit
     dlg.Show()
