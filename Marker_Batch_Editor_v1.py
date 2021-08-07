@@ -10,6 +10,8 @@
 
 import re, math
 
+regex = False
+
 marker_color = ['Blue','Cyan','Green','Yellow','Red','Pink','Purple','Fuchsia','Rose','Lavender','Sky','Mint','Lemon','Sand','Cocoa','Cream']
 
 def _exit(ev):
@@ -50,6 +52,10 @@ def del_markers(by, frameNum, color):
         o = False
     return o
 
+def replace_marker(type, mk_frameId, color, name, note, duration, customData):
+    del_markers(type, mk_frameId, color)
+    add_markers(mk_frameId, color, name, note, duration, customData)
+
 def edit_marker(type, before, after):
     pattern = re.compile(str(before))
     all_marker = read_all_marker()
@@ -67,19 +73,25 @@ def edit_marker(type, before, after):
             else:
                 pass
         elif type is 'name':
-            if re.search(pattern, name) is not None:
-                new_name = re.sub(pattern, after, name)
-                del_markers('frame', mk_frameId, color)
-                add_markers(mk_frameId, color, new_name, note, duration, customData)
+            if regex is True:
+                if re.search(pattern, name) is not None:
+                    new_name = re.sub(pattern, after, name)
+                    replace_marker('frame', mk_frameId, color, new_name, note, duration, customData)
+                else:
+                    pass
             else:
-                pass
+                new_name = name.replace(before, after)
+                replace_marker('frame', mk_frameId, color, new_name, note, duration, customData)
         elif type is 'note':
-            if re.search(pattern, note) is not None:
-                new_note = re.sub(pattern, after, note)
-                del_markers('frame', mk_frameId, color)
-                add_markers(mk_frameId, color, name, new_note, duration, customData)
+            if regex is True:
+                if re.search(pattern, name) is not None:
+                    new_note = re.sub(pattern, after, note)
+                    replace_marker('frame', mk_frameId, color, name, new_note, duration, customData)
+                else:
+                    pass
             else:
-                pass
+                new_note = note.replace(before, after)
+                replace_marker('frame', mk_frameId, color, name, new_note, duration, customData)
         else:
             pass
         print(color, duration, note, name, customData)
@@ -98,9 +110,11 @@ def _edit_color(ev):
     
 
 def _edit_notes(ev):
+    global regex
     before = itm['notes_a'].Text
     after = itm['notes_b'].Text
     if before==after:
+        regex = bool(1-regex)
         pass
     else:
         itm['edit_notes'].Enabled = False
@@ -108,12 +122,19 @@ def _edit_notes(ev):
         edit_marker('note', before, after)
         itm['edit_notes'].Enabled = True
         itm['edit_notes'].Text = '修改'
-    
+    if regex is True:
+        itm['notes_a'].PlaceholderText = '正则'
+        itm['name_a'].PlaceholderText = '正则'
+    else:
+        itm['name_a'].PlaceholderText = ''
+        itm['notes_a'].PlaceholderText = ''
 
 def _edit_name(ev):
+    global regex
     before = itm['name_a'].Text
     after = itm['name_b'].Text
     if before==after:
+        regex = bool(1-regex)
         pass
     else:
         itm['edit_name'].Enabled = False
@@ -121,6 +142,12 @@ def _edit_name(ev):
         edit_marker('name', before, after)
         itm['edit_name'].Enabled = True
         itm['edit_name'].Text = '修改'
+    if regex is True:
+        itm['notes_a'].PlaceholderText = '正则'
+        itm['name_a'].PlaceholderText = '正则'
+    else:
+        itm['name_a'].PlaceholderText = ''
+        itm['notes_a'].PlaceholderText = ''
 
 def _del_by_color(ev):
     targ = itm['color_a'].CurrentText
@@ -128,8 +155,6 @@ def _del_by_color(ev):
 
 def main_ui(ui):
     window = ui.VGroup({"Spacing": 10,},[
-        
-        
         ui.HGroup({"Spacing": 10, "Weight": 0,},[ 
             ui.Label({ "ID": "color","Text": "Color"}),
             ui.ComboBox({ "ID": "color_a","Weight": 4}),
