@@ -68,35 +68,35 @@ def edit_marker(type, before, after):
         note = str(mk['note'])
         name = str(mk['name'])
         customData = mk['customData']
-        if type is 'color':
-            if before==color:
-                del_markers('frame', mk_frameId, color)
-                add_markers(mk_frameId, after, name, note, duration, customData)
+        if color == itm['color_a'].CurrentText:
+            if type is 'color':
+                if before==color:
+                    del_markers('frame', mk_frameId, color)
+                    add_markers(mk_frameId, after, name, note, duration, customData)
+                else:
+                    pass
+            elif type is 'name':
+                if regex is True:
+                    if re.search(pattern, name) is not None:
+                        new_name = re.sub(pattern, after, name)
+                        replace_marker('frame', mk_frameId, color, new_name, note, duration, customData)
+                    else:
+                        pass
+                else:
+                    new_name = name.replace(before, after)
+                    replace_marker('frame', mk_frameId, color, new_name, note, duration, customData)
+            elif type is 'note':
+                if regex is True:
+                    if re.search(pattern, name) is not None:
+                        new_note = re.sub(pattern, after, note)
+                        replace_marker('frame', mk_frameId, color, name, new_note, duration, customData)
+                    else:
+                        pass
+                else:
+                    new_note = note.replace(before, after)
+                    replace_marker('frame', mk_frameId, color, name, new_note, duration, customData)
             else:
                 pass
-        elif type is 'name':
-            if regex is True:
-                if re.search(pattern, name) is not None:
-                    new_name = re.sub(pattern, after, name)
-                    replace_marker('frame', mk_frameId, color, new_name, note, duration, customData)
-                else:
-                    pass
-            else:
-                new_name = name.replace(before, after)
-                replace_marker('frame', mk_frameId, color, new_name, note, duration, customData)
-        elif type is 'note':
-            if regex is True:
-                if re.search(pattern, name) is not None:
-                    new_note = re.sub(pattern, after, note)
-                    replace_marker('frame', mk_frameId, color, name, new_note, duration, customData)
-                else:
-                    pass
-            else:
-                new_note = note.replace(before, after)
-                replace_marker('frame', mk_frameId, color, name, new_note, duration, customData)
-        else:
-            pass
-        print(color, duration, note, name, customData)
 
 def _edit_color(ev):
     before = itm['color_a'].CurrentText
@@ -216,6 +216,9 @@ if __name__ == '__main__':
                                     600, 600, 
                                     600, 150
                          ], 
+                        "WindowFlags":{
+                            "Window": True,
+                        }
                         },
     window_01)
 
