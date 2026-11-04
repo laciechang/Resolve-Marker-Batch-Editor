@@ -1,7 +1,8 @@
 # -*- coding:utf-8 -*-
 # Author: 张来吃
+# Traslated by: fabioorladi.it
 # Version: 1.0.0
-# Contact: laciechang@163.com
+# Contact: [laciechang@163.com](mailto:laciechang@163.com)
 
 # -----------------------------------------------------
 # This script must be run in DaVinci Resolve only.
@@ -105,11 +106,10 @@ def _edit_color(ev):
         pass
     else:
         itm['edit_color'].Enabled = False
-        itm['edit_color'].Text = '喝口茶'
+        itm['edit_color'].Text = 'Please wait'
         edit_marker('color', before, after)
         itm['edit_color'].Enabled = True
-        itm['edit_color'].Text = '替换'
-    
+        itm['edit_color'].Text = 'Replace'
 
 def _edit_notes(ev):
     global regex
@@ -120,13 +120,13 @@ def _edit_notes(ev):
         pass
     else:
         itm['edit_notes'].Enabled = False
-        itm['edit_notes'].Text = '喝口茶'
+        itm['edit_notes'].Text = 'Please wait'
         edit_marker('note', before, after)
         itm['edit_notes'].Enabled = True
-        itm['edit_notes'].Text = '修改'
+        itm['edit_notes'].Text = 'Edit'
     if regex is True:
-        itm['notes_a'].PlaceholderText = '正则'
-        itm['name_a'].PlaceholderText = '正则'
+        itm['notes_a'].PlaceholderText = 'Regex'
+        itm['name_a'].PlaceholderText = 'Regex'
     else:
         itm['name_a'].PlaceholderText = ''
         itm['notes_a'].PlaceholderText = ''
@@ -140,13 +140,13 @@ def _edit_name(ev):
         pass
     else:
         itm['edit_name'].Enabled = False
-        itm['edit_name'].Text = '喝口茶'
+        itm['edit_name'].Text = 'Please wait'
         edit_marker('name', before, after)
         itm['edit_name'].Enabled = True
-        itm['edit_name'].Text = '修改'
+        itm['edit_name'].Text = 'Edit'
     if regex is True:
-        itm['notes_a'].PlaceholderText = '正则'
-        itm['name_a'].PlaceholderText = '正则'
+        itm['notes_a'].PlaceholderText = 'Regex'
+        itm['name_a'].PlaceholderText = 'Regex'
     else:
         itm['name_a'].PlaceholderText = ''
         itm['notes_a'].PlaceholderText = ''
@@ -159,7 +159,6 @@ def _recover(ev):
     current = read_all_marker()
     for frameID in current:
         del_markers('frame', frameID, '')
-    
 
     for mk_frameId in start_up:
         mk = start_up[mk_frameId]
@@ -170,7 +169,6 @@ def _recover(ev):
         customData = mk['customData']
         o = add_markers(mk_frameId, color, name, note, duration, customData)
         print(o)
-    
 
 def main_ui(ui):
     window = ui.VGroup({"Spacing": 10,},[
@@ -178,25 +176,25 @@ def main_ui(ui):
             ui.Label({ "ID": "color","Text": "Color"}),
             ui.ComboBox({ "ID": "color_a","Weight": 4}),
             ui.ComboBox({ "ID": "color_b","Weight": 4}),
-            ui.Button({ "ID": "edit_color", "Text": "替换","Weight": 0}),
+            ui.Button({ "ID": "edit_color", "Text": "Replace","Weight": 0}),
         ]),
         ui.HGroup({"Spacing": 10, "Weight": 0,},[
             ui.HGap(),
-            ui.Button({ "ID": "del_by_color", "Text": "删除","Weight": 0}),
+            ui.Button({ "ID": "del_by_color", "Text": "Delete","Weight": 0}),
         ]),
         ui.HGroup({"Spacing": 10, "Weight": 0,},[ 
             ui.Label({ "ID": "notes","Text": "Notes"}),
             ui.LineEdit({ "ID": "notes_a","Weight": 4}),
             ui.LineEdit({ "ID": "notes_b","Weight": 4}),
-            ui.Button({ "ID": "edit_notes", "Text": "修改","Weight": 0}),
+            ui.Button({ "ID": "edit_notes", "Text": "Edit","Weight": 0}),
         ]),
         ui.HGroup({"Spacing": 10, "Weight": 0,},[ 
             ui.Label({ "ID": "name","Text": "Name"}),
             ui.LineEdit({ "ID": "name_a","Weight": 4}),
             ui.LineEdit({ "ID": "name_b","Weight": 4}),
-            ui.Button({ "ID": "edit_name", "Text": "修改","Weight": 0}),
+            ui.Button({ "ID": "edit_name", "Text": "Edit","Weight": 0}),
         ]),
-        ui.Button({ "ID": "recover","Text": "手滑了 恢复", "Flat": True}),
+        ui.Button({ "ID": "recover","Text": "Undo Restore", "Flat": True}),
         ])
     return window
 
